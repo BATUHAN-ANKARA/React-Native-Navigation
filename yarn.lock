@@ -1306,12 +1306,12 @@
     react-is "^16.13.0"
     use-latest-callback "^0.1.5"
 
-"@react-navigation/drawer@^6.5.4":
-  version "6.5.4"
-  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-6.5.4.tgz#90dc0ed9568e8a30a72d487abc2538ec6840b611"
-  integrity sha512-L+aQ+S03vCjpLPc7n3jbtgMgO2cduYM7l4yy1ylOcC/1W1pT2zer5KSGZngd/I52TWSjxfmV5cuvt7pweCTpKQ==
+"@react-navigation/drawer@^6.5.5":
+  version "6.5.5"
+  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-6.5.5.tgz#7e65201435bd23d8418878210a670e8598337436"
+  integrity sha512-dkmbkv7nc7EWOqns6AlewTHIIAIa3RMwmzbucjqPBnJNJEv76YxUmYpiSQ8TBH9R3czA/Km6eGodyYmkP+3o5Q==
   dependencies:
-    "@react-navigation/elements" "^1.3.10"
+    "@react-navigation/elements" "^1.3.11"
     color "^4.2.3"
     warn-once "^0.1.0"
 
@@ -1319,6 +1319,11 @@
   version "1.3.10"
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.10.tgz#7f4281eddef5ff424169413daaab9a66b27c4949"
   integrity sha512-JFaoZG9S+Zz291CvAMeGw8kNl/g2AaY9Pbo+VcYO+JM6UF/E5Obq9ga2ydxDrn3an7wzdl6flA/4lWhqG82Vqw==
+
+"@react-navigation/elements@^1.3.11":
+  version "1.3.11"
+  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.11.tgz#135c2cb3ae4a31bc835bb731110fd1ef9c38e237"
+  integrity sha512-o4J0g4ofJbbn68e4TpuGkuZLtq5mLll7Ndz9C4O4RvD2chchLuGQ5TycIPTKP428cz8JzuTCFqUe/ZhOPSsudw==
 
 "@react-navigation/material-bottom-tabs@^6.2.8":
   version "6.2.8"
