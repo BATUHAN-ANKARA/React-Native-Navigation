@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import * as Animatable from 'react-native-animatable'
 
-const SplashScreen = () => {
+const SplashScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -27,7 +27,7 @@ const SplashScreen = () => {
         <Text style={styles.title}>Stay Connected With Everyone!</Text>
         <Text style={styles.text}>Sign In With Account</Text>
         <View style={styles.button}>
-          <TouchableOpacity onPress={() => alert('Clicked')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
             <LinearGradient
               colors={['#08d4c4', '#01ab9d']}
               style={styles.signIn}>
