@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar,
+  Alert,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -90,17 +91,17 @@ const SignInScreen = ({navigation}) => {
       return username == item.username && password == item.password
     })
     if (data.username.length == 0 || data.password.length == 0) {
-      alert(
+      Alert.alert(
         'Wrong Input!',
-        'Username or password field cannot be empty.'[{text: 'Okay'}],
+        'Username or password field cannot be empty',
+        [{text: 'Okay'}],
       )
       return
     }
     if (foundUser.length == 0) {
-      alert(
-        'Invalid User',
-        'Username or password is incorrect.'[{text: 'Okay'}],
-      )
+      Alert.alert('Invalid User', 'Username or password is incorrect', [
+        {text: 'Okay'},
+      ])
       return
     }
     signIn(foundUser)

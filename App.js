@@ -1,7 +1,5 @@
 import React, {useEffect, useMemo, useReducer, useState} from 'react'
-import {NavigationContainer} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs'
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer'
 import MainTabScreen from './screens/MainTabScreen'
 import {DrawerContent} from './screens/DrawerContent'
@@ -13,8 +11,11 @@ import {View} from 'react-native'
 import {ActivityIndicator} from 'react-native-paper'
 import {AuthContext} from './components/context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import {Provider, MD3DarkTheme, adaptNavigationTheme} from 'react-native-paper'
 
 const Drawer = createDrawerNavigator()
+
+const {DarkTheme} = adaptNavigationTheme({reactNavigationDark: DefaultTheme})
 
 const App = () => {
   // const [isLoading, setIsLoading] = useState(true)
@@ -91,6 +92,9 @@ const App = () => {
         // setUserToken('fgkj')
         // setIsLoading(false)
       },
+      toggleTheme: () => {
+        setIsDarkTheme(isDarkTheme => !isDarkTheme)
+      },
     }),
     [],
   )
@@ -119,27 +123,32 @@ const App = () => {
   }
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        {loginState.userToken == null ? (
-          <RootStackScreen />
-        ) : (
-          <Drawer.Navigator
-            drawerContent={props => <DrawerContent {...props} />}>
-            <Drawer.Screen
-              name='HomeDrawer'
-              component={MainTabScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Drawer.Screen name='SupportScreen' component={SupportScreen} />
-            <Drawer.Screen name='SettingScreen' component={SettingScreen} />
-            <Drawer.Screen name='BookmarksScreen' component={BookmarksScreen} />
-          </Drawer.Navigator>
-        )}
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <Provider theme={MD3DarkTheme}>
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer theme={DarkTheme}>
+          {loginState.userToken == null ? (
+            <RootStackScreen />
+          ) : (
+            <Drawer.Navigator
+              drawerContent={props => <DrawerContent {...props} />}>
+              <Drawer.Screen
+                name='HomeDrawer'
+                component={MainTabScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Drawer.Screen name='SupportScreen' component={SupportScreen} />
+              <Drawer.Screen name='SettingScreen' component={SettingScreen} />
+              <Drawer.Screen
+                name='BookmarksScreen'
+                component={BookmarksScreen}
+              />
+            </Drawer.Navigator>
+          )}
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </Provider>
   )
 }
 
