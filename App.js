@@ -1,39 +1,147 @@
-import React from 'react'
-import {View, Text} from 'react-native'
+import React, {useEffect, useMemo, useReducer, useState} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs'
 import {createDrawerNavigator} from '@react-navigation/drawer'
-import HomeScreen from './screens/HomeScreen'
-import DetailScreen from './screens/DetailScreen'
 import MainTabScreen from './screens/MainTabScreen'
 import {DrawerContent} from './screens/DrawerContent'
 import SupportScreen from './screens/SupportScreen'
 import SettingScreen from './screens/SettingsScreen'
 import BookmarksScreen from './screens/BookmarksScreen'
 import RootStackScreen from './screens/RootStackScreen'
+import {View} from 'react-native'
+import {ActivityIndicator} from 'react-native-paper'
+import {AuthContext} from './components/context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const Tab = createMaterialBottomTabNavigator()
-const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
 
 const App = () => {
+  // const [isLoading, setIsLoading] = useState(true)
+  // const [userToken, setUserToken] = useState(null)
+
+  const initialLoginState = {
+    isLoading: true,
+    userName: null,
+    userToken: null,
+  }
+
+  const loginReducer = (prevState, action) => {
+    switch (action.type) {
+      case 'RETRIEVE_TOKEN':
+        return {
+          ...prevState,
+          userToken: action.token,
+          isLoading: false,
+        }
+      case 'LOGIN':
+        return {
+          ...prevState,
+          userName: action.id,
+          userToken: action.token,
+          isLoading: false,
+        }
+      case 'LOGOUT':
+        return {
+          ...prevState,
+          userName: null,
+          userToken: null,
+          isLoading: false,
+        }
+      case 'REGISTER':
+        return {
+          ...prevState,
+          userName: action.id,
+          userToken: action.token,
+          isLoading: false,
+        }
+    }
+  }
+
+  const [loginState, dispatch] = useReducer(loginReducer, initialLoginState)
+
+  const authContext = useMemo(
+    () => ({
+      signIn: async (userName, password) => {
+        // setUserToken('abc')
+        // setIsLoading(false)
+        let userToken
+        userToken = null
+        if (userName === 'user' && password === 'pass') {
+          try {
+            userToken = 'dfgdfg'
+            await AsyncStorage.setItem('userToken', userToken)
+          } catch (e) {
+            console.log(e)
+          }
+        }
+        console.log(userToken)
+        dispatch({type: 'LOGIN', id: userName, token: userToken})
+      },
+      signOut: async () => {
+        // setUserToken(null)
+        // setIsLoading(false)
+        try {
+          userToken = 'dfgdfg'
+          await AsyncStorage.removeItem('userToken')
+        } catch (e) {
+          console.log(e)
+        }
+        dispatch({type: 'LOGOUT'})
+      },
+      signUp: () => {
+        // setUserToken('fgkj')
+        // setIsLoading(false)
+      },
+    }),
+    [],
+  )
+
+  useEffect(() => {
+    setTimeout(async () => {
+      //setIsLoading(false)
+      let userToken
+      userToken = null
+      console.log(userToken)
+      try {
+        userToken = await AsyncStorage.getItem('userToken')
+      } catch (e) {
+        console.log(e)
+      }
+      dispatch({type: 'REGISTER', token: userToken})
+    }, 1000)
+  }, [])
+
+  if (loginState.isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size='large' />
+      </View>
+    )
+  }
+
   return (
-    <NavigationContainer>
-      <RootStackScreen />
-      {/* <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-        <Drawer.Screen
-          name='HomeDrawer'
-          component={MainTabScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Drawer.Screen name='SupportScreen' component={SupportScreen} />
-        <Drawer.Screen name='SettingScreen' component={SettingScreen} />
-        <Drawer.Screen name='BookmarksScreen' component={BookmarksScreen} />
-      </Drawer.Navigator> */}
-    </NavigationContainer>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        {loginState.userToken == null ? (
+          <RootStackScreen />
+        ) : (
+          <Drawer.Navigator
+            drawerContent={props => <DrawerContent {...props} />}>
+            <Drawer.Screen
+              name='HomeDrawer'
+              component={MainTabScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Drawer.Screen name='SupportScreen' component={SupportScreen} />
+            <Drawer.Screen name='SettingScreen' component={SettingScreen} />
+            <Drawer.Screen name='BookmarksScreen' component={BookmarksScreen} />
+          </Drawer.Navigator>
+        )}
+      </NavigationContainer>
+    </AuthContext.Provider>
   )
 }
 
